@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/style/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+ 
+<style>
+      .container{
+        float: right;
+      }
+      .reach{
+        float: left;
+        width: 1500px;
+      }
+      a{
+          text-decoration: none;
+          color: inherit;
+      }
+      #msgSign{
+        font: bolder;
+      }
+      #logspan{
+        font: bolder;
+      }
+        .footer-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 80px;
+}
+
+.footer-logo-description,
+.footer-quick-links,
+.footer-social-contact,
+.footer-newsletter {
+  flex: 1;
+}
+
+.footer-logo-description img {
+  width: 150px;
+}
+
+.footer-quick-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-quick-links ul li {
+  margin-bottom: 10px;
+}
+
+.footer-quick-links ul li a {
+  text-decoration: none;
+}
+
+.footer-social-contact .social-icons a {
+  margin-right: 10px;
+}
+
+.footer-newsletter form {
+  display: flex;
+}
+
+.footer-newsletter input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+}
+
+.footer-newsletter button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  background: black;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.footer-newsletter button:hover {
+  background: white;
+  color: black;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #444;
+}
+
+.legal-links a {
+  color: #bbb;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.legal-links a:hover {
+  text-decoration: underline;
+}
+
+.back-to-top {
+  background: none;
+  border: none;
+  color:black;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.back-to-top:hover {
+  color: black;
+}
+    </style>
+    <script>
+        $(document).ready(function(){
+
+    $("#signup").click(function(){
+        let obj={
+            type:"get",
+            url:"/signup-process",
+            data:{
+                txtEmail:$("#txtEmail").val(),
+                pwd:$("#pwd").val(),
+                combo:$("#combo").val()
+            }
+        }
+
+        $.ajax(obj).done(function(resp){
+          alert(resp);
+            $("#msgSign").html(resp);
+        }).fail(function(err){
+            alert(err.statusText);
+        })
+    })
+
+    $("#login").click(function()
+    {
+        let obj={
+            type:"get",
+            url:"/login-process",
+            data:{
+                txtEmaill:$("#txtEmaill").val(),
+                txtPwd:$("#txtPwd").val(),
+            }
+        }
+        $.ajax(obj).done(function(resp){
+            $("#logspan").html(resp);
+            if(resp=="Influencer"){
+              location.href="inf-dash.html";
+              localStorage.setItem("activeuser",$("#txtEmaill").val());
+            }
+            else if(resp=="Client"){
+              location.href="client-dash.html";
+              localStorage.setItem("activeuser",$("#txtEmaill").val());
+            }
+            else{
+              alert(resp);
+            }
+            //alert(resp);
+        }).fail(function(err){
+            alert(err.statusText);
+        })
+    })
+
+    $("#forgtPwd").click(function()
+    {
+      let obj={
+        type:"get",
+        url:"/send-mail",
+        data:{
+          txtEmaill:$("#txtEmaill").val(),
+        }
+      }
+      $.ajax(obj).done(function(resp){
+        alert("Check Your Mail for Your Password");
+      }).fail(function(err){
+        alert(err.statusText);
+      })
+    })
+
+
+    $("#txtEmail").blur(function(){
+            if($(this).val()==""){
+                $("#errEmail").html(`<div class="alert alert-warning" role="alert">
+                       Please Fill Email First!
+              </div>`);
+                return ;
+            }
+        })
+
+        $("#txtEmaill").blur(function(){
+            if($(this).val()==""){
+                $("#errEmaillogin").html(`<div class="alert alert-warning" role="alert">
+                       Please Fill Email First!
+              </div>`);
+                return ;
+            }
+        })
+})
+    </script>
+  </head>
+  <body id="home">
+    
+      <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid" style="background-color: rgb(230, 238, 240);">
+          <a class="navbar-brand" href="#">
+            <img src="pics/Trendy.png" alt="" height="60" width="60">
+            TrendyTrove.in</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <form class="d-flex" role="search">
+
+              <a href="#services">Our Services</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+              <a href="#team">Our Team</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+              <a href="#reach">Reach Us</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+              <!-- Button trigger modal Signup-->
+            <button type="button"  class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              SignUp
+            </button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <!-- Button trigger modal Login-->
+              <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModalLogin">
+                Login
+              </button>&nbsp;
+
+            </form>
+          </div>
+        </div>
+        <br><br>
+      </nav>
+
+
+
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="2000">
+      <img src="pics/banner3.jpeg" class="d-block w-100" alt="..." height="700px" width="750px">
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <img src="pics/banner1.jpeg" class="d-block w-100" alt="..." height="670px" width="750px">
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <img src="pics/banner2.jpeg" class="d-block w-100" alt="..." height="670px" width="750px">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div class="services">
+<center>
+<h2 style="background-color: rgb(236, 240, 241);" id="services">
+  Our Services
+</h2>
+<br>
+</center>
+
+<div class="container">
+  <div class="row">
+
+  <div class="card" style="width: 18rem;">
+    <img src="pics/collab.png" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Collaborations</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+
+  <div class="card" style="width: 18rem; margin-left: 10px; margin-right: 10px;">
+    <img src="pics/meet.jpg" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Meet & greet</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+
+  <div class="card" style="width: 18rem; margin-left: 10px; margin-right: 10px;">
+    <img src="pics/influ.jpg" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Find Infleuncers</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+
+  <div class="card" style="width: 18rem;">
+    <img src="pics/promo.avif" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Promotion</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div class="team">
+<center>
+  <h2 style="background-color: rgb(236, 240, 241);" id="team">
+    Our Team
+  </h2>
+  </center>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 bg-white offset-md-0">
+        <center>
+        <div class="row">
+      <div class="card" style="width: 28rem;">
+        <div class="card-body">
+          <h5 class="card-title" style="float: right;">Developed By <br></h5><br>
+          <br><h6 class="card-text" style="float: right;"> Mr. Abhishek Bansal <br> (Web Developer)</h6>
+          <img src="pics/me.jpg" class="card-img-top" alt="..." style="border-radius: 50%; height: 200px; width: 200px; float: left;">
+        </div>
+        </div>
+      </div>
+    </center>
+    
+  </div>
+  </div>
+  </div>
+</div>
+  <br><br>
+
+<div class="reach">
+  <center>
+    <h2 style="background-color: rgb(236, 240, 241);" id="reach">
+      Reach Us
+    </h2>
+    </center>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3437.175135209826!2d76.65720287561291!3d30.516086474689597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fc32344a6e2d7%3A0x81b346dee91799ca!2sChitkara%20University!5e0!3m2!1sen!2sin!4v1721073593372!5m2!1sen!2sin" width="1500" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
+
+  <div class="foot" >
+    <div class="footer-container" style="background-color: rgb(230, 238, 240);">
+      <div class="footer-logo-description">
+        <img src="pics/Trendy.png" alt="Influencer Finder Logo">
+        <p>Your go-to platform for discovering and connecting with top influencers.</p>
+        <h3> @Abhishek Bansal</h3>
+    <h5>Copyright</h5>
+      </div>
+      <div class="footer-quick-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Our Services</a></li>
+          <li><a href="#team">Our Team</a></li>
+          <li><a href="#reach">Reach Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-social-contact">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/"><img src="pics/fb.png" alt="Facebook" width="35" height="35"></a>
+          <a href="https://x.com/ABHISHE29765812"><img src="pics/twitter.jpeg" alt="Twitter" width="35" height="35"></a>
+          <a href="https://www.instagram.com/"><img src="pics/insta.jpg" alt="Instagram" width="35" height="35"></a>
+          <a href="www.linkedin.com/in/abhishek-bansal-002b6326b/"><img src="pics/linkedin.png" alt="LinkedIn" width="35" height="35"></a>
+        </div>
+        <h4>Contact Us</h4>
+        <p>Email: abhi2004bansal@gmail.com</p>
+        <p>Phone: +(91) 7528092645</p>
+      </div>
+      <div class="footer-newsletter">
+        <h4>Newsletter</h4>
+        <p>Stay updated with the latest influencer trends and tips. Subscribe to our newsletter!</p>
+        <form action="#">
+          <input type="email" placeholder="Your Email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom" style="background-color: rgb(230, 238, 240);">
+      <div class="testimonials-slider">
+        <!-- Testimonials content here -->
+      </div>
+      <div class="awards-certifications">
+        <!-- Awards icons here -->
+      </div>
+      <div class="legal-links">
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Cookie Policy</a>
+      </div>
+      <p>© 2024 TrendyTrove.in All Rights Reserved.</p>
+      <a href="#home" style="width: 40px; height: 40px;">↑</a>
+    </div>
+  </div>
+
+  
+<!-- Modal Signup-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">SignUp Page <span id="msgSign">*</span></h1>
+      </center>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+            <span id="errEmail" style="background-color: red"></span>
+          </div>
+          <div class="form-floating">
+            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+        <br>
+          <select class="form-select" aria-label="Default select example" id="combo" name="combo">
+            <option selected  >Select your category</option>
+            <option value="Client" >Client</option>
+            <option value="Influencer" name="infl" id="infl">Influencer</option>
+            
+          </select>
+            <br>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="signup">SignUp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Login-->
+<div class="modal fade" id="exampleModalLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <center>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Login Page</h1>
+      </center>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="txtEmaill" name="txtEmaill" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+            <span id="errEmaillogin"></span>
+          </div>
+          <div class="form-floating">
+            <input type="password" class="form-control" id="txtPwd" name="txtPwd" placeholder="Password"><i class="fa-solid fa-eye"></i>
+            <label for="floatingPassword">Password</label>
+            <a href="" id="forgtPwd">Forgot Password?</a>
+
+            <span id="logspan">*</span> <br>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="login">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </body>
+</html>

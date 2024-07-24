@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+    </style>
+    <script>
+        var module=angular.module("myKuchModule",[]);
+        var controller=module.controller("myKuchController",function($scope,$http)
+        {
+            $scope.jsonArrayInflu;
+            $scope.jsonArrayfnc;
+            //----------------------------------------------
+            $scope.findInflu=function(){
+                let field=$scope.selField;
+                let url="/fetch-all-fields?field="+field;
+                $http.get(url).then(function(response)
+                {
+                    //alert(JSON.stringify(response.data));
+                    $scope.jsonArrayInflu=response.data;
+                },function(err){
+                    alert(err);
+                });
+            }
+
+            //------------------------------------------------
+            $scope.getAll=function(){
+                let field=$scope.selField;
+                let city=$scope.selCity;
+                let url="/do-find-All?field="+field+"&city="+city;
+                $http.get(url).then(allIsWell,notWell);
+
+                function allIsWell(response)
+                {
+                    $scope.jsonArrayfnc=response.data;
+                }
+                function notWell(err){
+                    alert(err);
+                }
+
+            }
+            //--------------------------------------------------
+            $scope.getAllbyName=function(){
+                let name=$scope.selName;
+                let url="/do-find-by-name?name="+name;
+                $http.get(url).then(allIsWell,notWell);
+
+                function allIsWell(response)
+                {
+                    $scope.jsonArrayfnc=response.data;
+                }
+                function notWell(err){
+                    alert(err);
+                }
+            }
+            //----------------------------------------------------
+            $scope.showinfo=function(index){
+                //alert(index);
+                $scope.fullDetailsObj=$scope.jsonArrayfnc[index];
+            }
+        })
+    </script>
+</head>
+<body ng-app="myKuchModule" ng-controller="myKuchController">
+  <center>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid" style="background-color: rgb(230, 238, 240);">
+        <a class="navbar-brand" href="#">
+          <img src="pics/Trendy.png" alt="" height="60" width="60">
+          TrendyTrove.in</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        </div>
+      </div>
+    </nav>
+  </center>
+
+
+    <center>
+        <h1 style="background-color: rgb(0, 183, 255); color: white;">Find Infleuncers</h1>
+    </center><br><br>
+    <div class="container">
+    <div class="row">
+
+
+        <div class="col-md-3">
+            Field <select name="field" ng-model="selField" ng-change="findInflu();" required id="field" class="form-control">
+                <option selected disabled value="">Choose.....</option>
+                <option value="Singing">Singing</option>
+                <option value="Acting">Acting</option>
+                <option value="Dancing">Dancing</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Sports">Sports</option>
+                <option value="Comedian">Comedian</option>
+                <option value="Vlogger">Vlogger</option>
+            </select>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-3">
+        City <select name="city" ng-model="selCity" id="city" ng-change="fillCities();" class="form-control">
+            <option selected disabled value="">Choose.....</option>
+            <option ng-repeat="obj in jsonArrayInflu" value="{{obj.city}}">{{obj.city}}</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+
+    </div>
+<div class="col-md-2">
+    <br>
+      <button type="button" class="btn btn-outline-info" ng-click="getAll();">Find Now</button>
+</div>
+</div>
+<br><br>
+
+<div class="row">
+
+
+    <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Name" ng-model="selName" aria-label="First name">
+        </div>
+<div class="col-md-2">
+  <button type="button" class="btn btn-outline-info" ng-click="getAllbyName();">Find By Name</button>
+</div>
+</div>
+<br><br>
+      <hr>
+    <center>
+    <div class="container2">
+        <div class="row">
+            <div class="col-md-3" ng-repeat="obj in jsonArrayfnc">
+                <div class="card" mt-5>
+                    <center><img src="uploads/{{obj.picpath}}" alt="..." height="50%" width="50%"> </center>
+                    <div class="card-body">
+                      <h5 class="card-title">{{obj.iname}}</h5>
+                      <h5 class="card-title">Gender: {{obj.gender}}</h5>
+                      <h5 class="card-title">Insta ID: {{obj.insta}}</h5>
+                      <br><br>
+                      <center><input type="button" data-bs-toggle="modal" data-bs-target="#modalDetails"
+                        class="btn btn-primary" ng-click="showinfo($index);" value="More Info"></center>
+
+                    </div>
+                </div>
+          </div>
+      </div>
+  </div>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="modalDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">More Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>
+          Email: {{fullDetailsObj.emailid}}
+        </p>
+        <p>
+          D.O.B: {{fullDetailsObj.dob}}
+        </p>
+        <p>
+          Address: {{fullDetailsObj.address}}
+        </p>
+        <p>
+          City: {{fullDetailsObj.city}}
+        </p>
+        <p>
+          Contact: {{fullDetailsObj.contact}}
+        </p>
+        <p>
+
+        </p>
+        <p>
+            <a href="https://www.instagram.com/{{fullDetailsObj.insta}}/">
+                <img src="pics/insta.jpg" alt="" width="70" height="70">
+            </a>
+            <a href="https://www.facebook.com/profile.php?id={{fullDetailsObj.fb}}">
+                <img src="pics/fb.png" alt="" width="50" height="50">
+            </a>
+        </p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</center>
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

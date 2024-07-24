@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        *{
+            background-color: rgb(236, 247, 251);
+        }
+    </style>
+    <script>
+        var module=angular.module("myKuchModule",[]);
+        var controller=module.controller("myKuchController",function($scope,$http)
+        {
+            $scope.jsonArrayAll;
+            $scope.getAll=function(){
+                let url="/fetch-all";
+                $http.get(url).then(function(response)
+                {
+                    //alert(JSON.stringify(response.data));
+                    $scope.jsonArrayAll=response.data;
+                },function(err){
+                    alert(err);
+                });
+            }
+
+            //------------------------------------------------
+            $scope.doDelete=function(email)
+            {
+                let url="/del-one?email="+email;
+                $http.get(url).then(allIsWell,notWell);
+
+                function allIsWell(response)
+                {
+                    alert(response.data);
+                    $scope.getAll();
+                }
+                function notWell(err){
+                    alert(err);
+                }
+            }
+            //------------------------------------------------------
+            $scope.doBlock=function(email){
+                let url="/block-one?email="+email;
+                $http.get(url).then(allIsWell,notWell);
+
+                function allIsWell(response)
+                {
+                    alert(response.data);
+                    $scope.getAll();
+                }
+                function notWell(err){
+                    alert(err);
+                }
+            }
+            //--------------------------------------------------------
+            $scope.doResume=function(email){
+                let url="/resume-one?email="+email;
+                $http.get(url).then(allIsWell,notWell);
+
+                function allIsWell(response)
+                {
+                    alert(response.data);
+                    $scope.getAll();
+                }
+                function notWell(err){
+                    alert(err);
+                }
+            }
+        });
+        </script>
+</head>
+<body ng-app="myKuchModule" ng-controller="myKuchController">
+
+    <center>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid" style="background-color: rgb(230, 238, 240);">
+            <a class="navbar-brand" href="#">
+              <img src="pics/Trendy.png" alt="" height="60" width="60">
+              TrendyTrove.in</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            </div>
+          </div>
+        </nav>
+      </center>
+
+
+
+    <center>
+        <h1 style="background-color: rgb(0, 183, 255); color: white;">Admin - All Users Info</h1><br><br>
+    <input type="button" class="btn btn-primary" value="Fetch All Users" ng-click="getAll();">
+    <hr>
+    <div class="container">
+    <table width="700" border="1" rules="all" class="table table-striped table-hover">
+        <tr>
+            <th style="background-color: skyblue;">Sr. No.</th>
+            <th style="background-color: skyblue;">Email ID</th>
+            <th style="background-color: skyblue;">Password</th>
+            <th style="background-color: skyblue;">User Type</th>
+            <th style="background-color: skyblue;">Status</th>
+            <th style="background-color: skyblue;"></th>
+        </tr>
+        <tr ng-repeat="obj in jsonArrayAll">
+            <td>{{$index+1}}</td>
+            <td>
+                {{obj.email}}
+            </td>
+            <td>
+                {{obj.pwd}}
+            </td>
+            <td>
+                {{obj.utype}}
+            </td>
+            <td>
+                {{obj.status}}
+            </td>
+            <td>
+                <input type="button" class="btn btn-outline-danger" value="Block" ng-click="doBlock(obj.email);">
+                <input type="button" class="btn btn-outline-warning" value="Resume" ng-click="doResume(obj.email);">
+                <input type="button" class="btn btn-outline-info" value="Delete" ng-click="doDelete(obj.email);">
+            </td>
+    </table>
+</div>
+</center>
+</body>
+</html>

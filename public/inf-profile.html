@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            /*
+            $(document).ajaxStart(function(){
+                $("#bg").css("display","block");
+                $("#wait").css("display","block");
+            })
+            $(document).ajaxStop(function(){
+                $("#wait").css("display","none");
+                $("#bg").css("display","none");
+            })*/
+
+            let active=localStorage.getItem("activeuser");
+            $("#emailid").val(active).prop("readonly",true);
+            
+            $("#emailid").blur(function(){
+                if($(this).val()==""){
+                    $("#errEmail").html("");
+                    return ;
+                }
+
+                let obj={
+                    type:"get",
+                    url:"/check-user-existance",
+                    data:{
+                        emailid:$("#emailid").val()
+                    }
+                }
+                $.ajax(obj).done(function(resp){
+                    //alert(resp)
+                    $("#errEmail").html(resp);
+                }).fail(function(err){
+                    $("#errEmail").html(err);
+                })
+            })
+
+            //--------------------------------------
+            $("#btnSearch").click(function(){
+                let obj={
+                    type:"get",
+                    url:"/find-user-details",
+                    data:{
+                        emailid:$("#emailid").val()
+                    }
+                }
+                $.ajax(obj).done(function(jsonAry){
+                    if(jsonAry.length==0){
+                        alert("Invalid ID");
+                        return ;
+                    }
+                    alert(JSON.stringify(jsonAry));
+                    $("#iname").val(jsonAry[0].iname); //Table coloumn vala
+                    $("#gender").val(jsonAry[0].gender);  //table coloumn vala
+                    $("#dob").val(jsonAry[0].dob);
+                    $("#address").val(jsonAry[0].address);
+                    $("#city").val(jsonAry[0].city);
+                    $("#contact").val(jsonAry[0].contact);
+                    $("#insta").val(jsonAry[0].insta);
+                    $("#fb").val(jsonAry[0].fb);
+                    $("#youtube").val(jsonAry[0].youtube);
+                    $("#other").val(jsonAry[0].other);
+                    $("#prev").prop("src","uploads/"+jsonAry[0].picpath);
+                    $("#hdn").val(jsonAry[0].picpath);
+                    $("#field").val(icategory.split(","));
+
+
+                }).fail(function(err){
+                    alert(err.statusText);
+                })
+            })
+        })
+    </script>
+    <script>
+        function doPrev(fileCtrl,imgPrev){
+            const [file]=fileCtrl.files;
+            if(file){
+                imgPrev.src=URL.createObjectURL(file);
+            }
+        }
+    </script>
+  </head>
+  <body>
+    <center>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid" style="background-color: rgb(230, 238, 240);">
+            <a class="navbar-brand" href="#">
+              <img src="pics/Trendy.png" alt="" height="60" width="60">
+              TrendyTrove.in</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            </div>
+          </div>
+        </nav>
+      </center>
+
+
+
+    <div id="bg"></div>
+    <div id="wait"></div>
+    <center>
+        <h1 class="box" style="background-color: rgb(0, 183, 255); color: white;">Profile Details</h1>
+    </center>
+        <br><br>
+    <div class="container">
+        <form class="row g-3" method="post" enctype="multipart/form-data">
+            <div class="col-md-6">
+              <label for="inputEmail4" class="form-label">Email</label>
+              <input type="email" class="form-control" id="emailid" name="emailid">
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary" id="btnSearch" value="Search">Search</button>
+                <img src="" alt="" id="prev" height="100px" width="100px">
+                <br><span id="errEmail"></span>
+            </div>
+            <div class="col-6">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="iname" name="iname">
+            </div>
+            <div class="col-md-3">
+                Gender <select name="gender" class="form-control" id="gender" required>
+                    <option value="Select Your Category"></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+              <label for="inputAddress" class="form-label">Address</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="col-md-4">
+                D.O.B. <input type="date" class="form-control" name="dob" id="dob" required>
+            </div>
+            <div class="col-md-4">
+                City <select name="city" id="city" class="form-control" required>
+                    <option value="Select">Select</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Bathinda">Bathinda</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Hisar">Hisar</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Patiala">Patiala</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Ludhiana">Ludhiana</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Kolkata">Kolkata</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                Contact <input type="text" class="form-control" name="contact" id="contact" required>
+            </div>
+            <div class="col-md-4">
+                Field <select name="field" id="field" class="form-control" multiple required>
+                    <option value="Singing">Singing</option>
+                    <option value="Acting">Acting</option>
+                    <option value="Dancing">Dancing</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Comedian">Comedian</option>
+                    <option value="Vlogger">Vlogger</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                Instagram <input type="text" class="form-control" name="insta" id="insta" required>
+                Facebook <input type="text" class="form-control" name="fb" id="fb">
+                Profile pic <input type="file" class="form-control" name="ppic" onchange="doPrev(this,prev);" required>
+            </div>
+            <div class="col-md-4">
+                Youtube <input type="text" class="form-control" name="youtube" id="youtube" required>
+                Other Info <input type="text" class="form-control" name="other" id="other">
+            </div>
+            <div class="col-md-12"></div>
+            <center>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary" value="Save" id="save" formaction="/inf-save-process">Save</button>
+                  <button type="submit" class="btn btn-primary" value="Update" id="update" formaction="/inf-update">Update</button>
+                </div>
+            </center>
+          </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

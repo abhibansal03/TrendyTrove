@@ -26,7 +26,7 @@ let config={
     password:"fy8s4JTzNP5VRgoqAJEp",
     database:"bbn9gl6pblskxiidomro",
     dateStrings:true,
-    keepAliveDelay: 10000,
+    keepAliveInitialDelay: 10000,
     enableKeepAlive: true,
 }
 

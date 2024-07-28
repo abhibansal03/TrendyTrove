@@ -69,7 +69,7 @@
                     $("#other").val(jsonAry[0].other);
                     $("#prev").prop("src","uploads/"+jsonAry[0].picpath);
                     $("#hdn").val(jsonAry[0].picpath);
-                    $("#field").val(icategory.split(","));
+                    $("#field").val(jsonAry[0].field.split(","));
 
 
                 }).fail(function(err){

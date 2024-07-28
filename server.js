@@ -31,13 +31,13 @@ let config={
 }
 
 let transporter=nodemailer.createTransport({
-    host: "abhi2004bansal@gmail.com",
+    host: "bce@gmail.com",
     port: 587,
     secure: false,
     service:'gmail',
     auth:{
-        user:"abhi2004bansal@gmail.com",
-        pass:'abhi'
+        user:"bce@gmail.com",
+        pass:"fjhfjhf"
     }
 });
 
@@ -133,7 +133,7 @@ app.post("/inf-save-process",function(req,resp){
 
     mysql.query("insert into IProfile values(?,?,?,?,?,?,?,?,?,?,?,?,?)",[req.body.emailid, req.body.iname, req.body.gender, req.body.dob, req.body.address, req.body.city, req.body.contact, req.body.field.toString(), req.body.insta, req.body.fb, req.body.youtube, req.body.other, fileName],function(err){
         if(err==null){
-            resp.send("Saved Successfullly");
+            resp.redirect("result.html");
         }
         else{
             resp.send(err.message);
@@ -159,7 +159,7 @@ app.post("/inf-update",function(req,resp){
     mysql.query("update IProfile set iname=?, gender=?, dob=?, address=?, city=?, contact=?, field=?, insta=?, fb=?, youtube=?, other=?, picpath=? where emailid=?",[req.body.iname, req.body.gender, req.body.dob, req.body.address, req.body.city, req.body.contact, req.body.field.toString(), req.body.insta, req.body.fb, req.body.youtube, req.body.other, fileName,req.body.emailid],function(err,result){
         if(err==null){
             if(result.affectedRows>=1){
-                resp.send("Record Updated successfulllyy....");
+                resp.redirect("result.html");
             }
             else{
                 resp.send("Invalid Email ID");
@@ -238,13 +238,13 @@ app.get("/send-mail",function(req,resp){
             let transporter=nodemailer.createTransport({
                 service:'gmail',
                 auth:{
-                    user:"abhi2004bansal@gmail.com",
-                    pass:'abhi'
+                    user:"bce@gmail.com",
+                    pass:'fjhfjhf'
                 }
             });
 
             var mailOptions={
-                from:'abhi2004bansal@gmail.com',
+                from:"bce@gmail.com",
                 to: req.query.mail,
                 subject: 'Sending Email using Node.js',
                 html:"Thank You for placing your order <br> Visit Again!"+ retPwd,
@@ -372,7 +372,7 @@ app.post("/client-save-process",function(req,resp){
     console.log(req.body);
     mysql.query("insert into cprofile values(?,?,?,?,?,?)",[req.body.email, req.body.name, req.body.city, req.body.state, req.body.org, req.body.mobile],function(err){
         if(err==null){
-            resp.send("Saved Successfullly");
+            resp.redirect("result.html");
         }
         else{
             resp.send(err.message);
@@ -384,7 +384,7 @@ app.post("/client-update-process",function(req,resp){
     mysql.query("update cprofile set email=?, name=?, city=?, state=?, org=?, mobile=?",[req.body.email, req.body.name, req.body.city, req.body.state, req.body.org, req.body.mobile],function(err,result){
         if(err==null){
             if(result.affectedRows>=1){
-                resp.send("Record Updated successfulllyy....");
+                resp.redirect("result.html");
             }
             else{
                 resp.send("Invalid Email ID");
